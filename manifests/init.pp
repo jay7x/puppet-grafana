@@ -103,21 +103,6 @@
 #   Example:
 #     sysconfig => { 'http_proxy' => 'http://proxy.example.com/' }
 #
-# @param toml_manage_package
-#   ruby-toml is required to generate the TOML-based LDAP config for Grafana.
-#   Set to false if you manage package- or gem-install
-#   somewhere else.
-#
-# @param toml_package_name
-#   Name of the software-package providing the TOML parser library.
-#
-# @param toml_package_ensure
-#   Ensure the package-resource - e.g. installed, absent, etc.
-#   https://puppet.com/docs/puppet/latest/types/package.html#package-attribute-ensure
-#
-# @param toml_package_provider
-#   The package-provider used to install the TOML parser library.
-#
 # @param docker_image
 #   name of the docker image that provides grafana
 #
@@ -166,10 +151,6 @@ class grafana (
   Stdlib::Absolutepath $provisioning_datasources_file = "${provisioning_dir}/datasources/puppetprovisioned.yaml",
   Boolean $create_subdirs_provisioning = false,
   Optional[Hash] $sysconfig = undef,
-  Boolean $toml_manage_package = true,
-  String[1] $toml_package_name = 'ruby-toml',
-  String[1] $toml_package_ensure = 'present',
-  Optional[String[1]] $toml_package_provider = undef,
   Stdlib::HTTPUrl $repo_gpg_key_url = 'https://packages.grafana.com/gpg.key',
 ) {
   contain grafana::install
