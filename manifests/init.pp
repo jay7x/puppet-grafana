@@ -103,15 +103,6 @@
 #   Example:
 #     sysconfig => { 'http_proxy' => 'http://proxy.example.com/' }
 #
-# @param ldap_servers
-#   Servers to be passed to `create_resources`, wraps around the
-#   `grafana_ldap_server` resource.
-#
-# @param ldap_group_mappings
-#   ldap_group_mappings
-#   Mappings to be passed to `create_resources`, wraps around the
-#   `grafana_ldap_group_mapping` resource.
-#
 # @param toml_manage_package
 #   ruby-toml is required to generate the TOML-based LDAP config for Grafana.
 #   Set to false if you manage package- or gem-install
@@ -175,8 +166,6 @@ class grafana (
   Stdlib::Absolutepath $provisioning_datasources_file = "${provisioning_dir}/datasources/puppetprovisioned.yaml",
   Boolean $create_subdirs_provisioning = false,
   Optional[Hash] $sysconfig = undef,
-  Hash[String[1], Hash] $ldap_servers = {},
-  Hash[String[1], Hash] $ldap_group_mappings = {},
   Boolean $toml_manage_package = true,
   String[1] $toml_package_name = 'ruby-toml',
   String[1] $toml_package_ensure = 'present',
@@ -195,7 +184,4 @@ class grafana (
   # Dependency added for Grafana_plugins to ensure it runs at the
   # correct time.
   Class['grafana::config'] -> Grafana_Plugin <| |> ~> Class['grafana::service']
-
-  create_resources('grafana_ldap_server', $ldap_servers)
-  create_resources('grafana_ldap_group_mapping', $ldap_group_mappings)
 }
